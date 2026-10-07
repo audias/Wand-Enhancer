@@ -43,6 +43,54 @@ describe('production bridge runtime', () => {
         }
     });
 
+    it('mirrors the bridge log into each Wand window DevTools console', async () => {
+        const bridge = require('../../dist/bridge.cjs');
+        const createdListeners: ((event: unknown, contents: unknown) => void)[] = [];
+        const electron = {
+            app: {
+                on: (_event: string, listener: (typeof createdListeners)[number]) =>
+                    createdListeners.push(listener),
+            },
+            ipcMain: { handle: () => undefined },
+        };
+        const port = await getFreePort();
+        const runtime = bridge.installWandRuntime(electron, {
+            host: '127.0.0.1',
+            port,
+            maxPort: port,
+        });
+
+        try {
+            const loadListeners: (() => void)[] = [];
+            const scripts: string[] = [];
+            const contents = {
+                isDestroyed: () => false,
+                send: () => undefined,
+                executeJavaScript: (code: string) => {
+                    scripts.push(code);
+                    return Promise.resolve();
+                },
+                on: (event: string, listener: () => void) => {
+                    if (event === 'dom-ready') {
+                        loadListeners.push(listener);
+                    }
+                },
+            };
+            for (const listener of createdListeners) {
+                listener({}, contents);
+            }
+            for (const listener of loadListeners) {
+                listener();
+            }
+
+            const replay = scripts.find((script) => script.includes('Log so far'));
+            expect(replay).toBeDefined();
+            expect(replay).toContain('Wand runtime hooks installed.');
+        } finally {
+            runtime.close();
+        }
+    });
+
     it('rejects a browser WebSocket from a different origin', async () => {
         const bridge = require('../../dist/bridge.cjs');
         const port = await getFreePort();

@@ -78,6 +78,7 @@
         <Compile Include="Core\Enhancer.cs" />
         <Compile Include="Core\EnhancerConfig.cs" />
         <Compile Include="Core\LauncherLog.cs" />
+        <Compile Include="Core\PatchRunLog.cs" />
         <Compile Include="Core\Win32Error.cs" />
         <Compile Include="Core\Patching\Shared\PeImage.cs" />
         <Compile Include="Core\Patching\Shared\ElectronFuseWire.cs" />

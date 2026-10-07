@@ -25,6 +25,7 @@ const IPC_CHANNEL = Object.freeze({
 
 module.exports = {
     BRIDGE_LOG_FILE_NAME: 'wand-remote-bridge.log',
+    BRIDGE_LOG_HISTORY_LIMIT: 200,
     BRIDGE_PROTOCOL_VERSION: WEB_CONTRACT.protocolVersion,
     BRIDGE_SERVER_VERSION: WEB_CONTRACT.serverVersion,
     DEFAULT_REMOTE_HOST: WEB_CONTRACT.defaultRemoteHost,
@@ -33,6 +34,8 @@ module.exports = {
     IPC_CHANNEL,
     KNOWN_CHEAT_TYPES,
     MAX_WS_FRAME_BYTES: 1024 * 1024,
+    // Written by the desktop patcher next to app.asar; keep in sync with Enhancer.PatchLogFileName.
+    PATCH_LOG_FILE_NAME: 'wand-enhancer-patch.log',
     PORT_SCAN_RANGE: WEB_CONTRACT.portScanRange,
     REMOTE_ASSETS_PREFIX: WEB_CONTRACT.assetsPath,
     REMOTE_BASE_PATH: WEB_CONTRACT.basePath,

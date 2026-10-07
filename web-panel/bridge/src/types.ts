@@ -20,6 +20,14 @@ export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 export type LogFn = (level: LogLevel, message: string, error?: unknown) => void;
 
+/** One bridge log line as kept in memory for the DevTools console. */
+export type BridgeLogEntry = {
+    time: string;
+    level: LogLevel;
+    message: string;
+    detail?: string;
+};
+
 /** One connected websocket peer. */
 export type BridgeClient = {
     socket: Socket;

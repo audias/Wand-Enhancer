@@ -4,6 +4,7 @@ const path = require('node:path');
 const { IPC_CHANNEL, REMOTE_COMMAND_RESPONSE_TIMEOUT_MS } = require('../constants');
 const { writeInstallLog } = require('../logger');
 const { ensureBridge } = require('../runtime');
+const { installDevToolsLog } = require('./devtools-log');
 const { installRendererScripts } = require('./renderer-scripts');
 const { localizeTrainerSnapshot } = require('./trainer-localization');
 const { safeString } = require('../utils');
@@ -76,6 +77,7 @@ function installWandRuntime(electron: ElectronPort, options: BridgeOptions = {})
     });
 
     installIpcHandlers(electron, runtime, boundRenderers, pendingCommandResponses);
+    installDevToolsLog(electron, options);
     installRendererScripts(electron, runtime, {
         ...options,
         panelRoot: options.panelRoot || path.dirname(__dirname),
